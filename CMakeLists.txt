@@ -11,4 +11,6 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 include(ExternalAnalyzerSDK)
 
+include_directories(include)
+
 add_subdirectory(src)
