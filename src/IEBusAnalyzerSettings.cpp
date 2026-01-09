@@ -30,11 +30,11 @@ auto constexpr DATA_BIT_1_LOW_US  = DATA_BIT_TOTAL_US - DATA_BIT_1_HIGH_US;
 
 } // namespace
 
-IEBusAnalyzerSettings::IEBusAnalyzerSettings() : m_bitWidth(START_BIT_HIGH_US), m_startBitWidth(DATA_BIT_TOTAL_US), m_inputChannel(UNDEFINED_CHANNEL) {
-  m_bitWidthInterface.SetTitleAndTooltip("Bit Width (uS)", "Specify the bit width in uS");
-  m_bitWidthInterface.SetMax(6000000);
-  m_bitWidthInterface.SetMin(1);
-  m_bitWidthInterface.SetInteger(m_bitWidth);
+IEBusAnalyzerSettings::IEBusAnalyzerSettings() : m_dataBitWidth(DATA_BIT_TOTAL_US), m_startBitWidth(START_BIT_HIGH_US), m_inputChannel(UNDEFINED_CHANNEL) {
+  m_dataBitWidthInterface.SetTitleAndTooltip("Bit Width (uS)", "Specify the bit width in uS");
+  m_dataBitWidthInterface.SetMax(6000000);
+  m_dataBitWidthInterface.SetMin(1);
+  m_dataBitWidthInterface.SetInteger(m_dataBitWidth);
 
   m_inputChannelInterface.SetTitleAndTooltip("Receive Channel", "Slave Receive Channel");
   m_inputChannelInterface.SetChannel(m_inputChannel);
@@ -44,7 +44,7 @@ IEBusAnalyzerSettings::IEBusAnalyzerSettings() : m_bitWidth(START_BIT_HIGH_US), 
   m_startBitWidthInterface.SetMin(1);
   m_startBitWidthInterface.SetInteger(m_startBitWidth);
 
-  AddInterface(&m_bitWidthInterface);
+  AddInterface(&m_dataBitWidthInterface);
   AddInterface(&m_inputChannelInterface);
   AddInterface(&m_startBitWidthInterface);
 
@@ -56,8 +56,8 @@ IEBusAnalyzerSettings::IEBusAnalyzerSettings() : m_bitWidth(START_BIT_HIGH_US), 
   AddChannel(m_inputChannel, "IEbus", false);
 }
 
-auto IEBusAnalyzerSettings::getBitWidth() const -> int {
-  return m_bitWidth;
+auto IEBusAnalyzerSettings::getDataBitWidth() const -> int {
+  return m_dataBitWidth;
 }
 
 auto IEBusAnalyzerSettings::getInputChannel() const -> Channel {
@@ -69,7 +69,7 @@ auto IEBusAnalyzerSettings::getStartBitWidth() const -> int {
 }
 
 auto IEBusAnalyzerSettings::SetSettingsFromInterfaces() -> bool {
-  m_bitWidth = m_bitWidthInterface.GetInteger();
+  m_dataBitWidth = m_dataBitWidthInterface.GetInteger();
   m_inputChannel = m_inputChannelInterface.GetChannel();
   m_startBitWidth = m_startBitWidthInterface.GetInteger();
 
@@ -83,7 +83,7 @@ auto IEBusAnalyzerSettings::LoadSettings(const char* settings) -> void {
   SimpleArchive text_archive;
   text_archive.SetString(settings);
 
-  text_archive >> m_bitWidth;
+  text_archive >> m_dataBitWidth;
   text_archive >> m_inputChannel;
   text_archive >> m_startBitWidth;
 
@@ -96,7 +96,7 @@ auto IEBusAnalyzerSettings::LoadSettings(const char* settings) -> void {
 auto IEBusAnalyzerSettings::SaveSettings() -> char const* {
   SimpleArchive text_archive;
 
-  text_archive >> m_bitWidth;
+  text_archive >> m_dataBitWidth;
   text_archive << m_inputChannel;
   text_archive << m_startBitWidth;
 
@@ -104,7 +104,7 @@ auto IEBusAnalyzerSettings::SaveSettings() -> char const* {
 }
 
 auto IEBusAnalyzerSettings::UpdateInterfacesFromSettings() -> void {
-  m_bitWidth = m_bitWidthInterface.GetInteger();
+  m_dataBitWidth = m_dataBitWidthInterface.GetInteger();
 
   m_inputChannelInterface.SetChannel(m_inputChannel);
   m_startBitWidthInterface.SetInteger(m_startBitWidth);

@@ -38,8 +38,8 @@ IEBusAnalyzer::IEBusAnalyzer() : Analyzer2(), m_settings(), m_simulationInitiali
   SetAnalyzerSettings(&m_settings);
 
   m_toleranceStart = m_settings.getStartBitWidth() / 10;
-  m_toleranceBit = m_settings.getBitWidth() / 10;
-  m_zeroBitLen = static_cast<U32>((static_cast<double>(m_settings.getBitWidth()) * 0.875));
+  m_toleranceBit = m_settings.getDataBitWidth() / 10;
+  m_zeroBitLen = static_cast<U32>((static_cast<double>(m_settings.getDataBitWidth()) * 0.875));
   m_data = 0;
   m_flags = 0;
 
@@ -114,7 +114,7 @@ auto IEBusAnalyzer::SetupResults() -> void {
     m_serial->AdvanceToNextEdge();
     m_startSampleNumberFinish = m_serial->GetSampleNumber();
     m_measureWidth = (m_startSampleNumberFinish - m_startSampleNumberStart);
-    if ((m_measureWidth > ((m_settings.getBitWidth() / 2) - m_toleranceBit)) && (m_measureWidth < ((m_settings.getBitWidth() / 2) + m_toleranceBit))) {
+    if ((m_measureWidth > ((m_settings.getDataBitWidth() / 2) - m_toleranceBit)) && (m_measureWidth < ((m_settings.getDataBitWidth() / 2) + m_toleranceBit))) {
       m_results->AddMarker(m_serial->GetSampleNumber(), AnalyzerResults::One, inputChannel);
       m_data = 1;
     } else {
@@ -189,7 +189,7 @@ auto IEBusAnalyzer::getAddress(bool master) -> bool {
     m_serial->AdvanceToNextEdge();
     m_startSampleNumberFinish = m_serial->GetSampleNumber();
     m_measureWidth = (m_startSampleNumberFinish - m_startBitNumberStart);
-    if ((m_measureWidth > (m_settings.getBitWidth() / 2 - m_toleranceBit)) && (m_measureWidth < ((m_settings.getBitWidth() / 2) + m_toleranceBit))) {
+    if ((m_measureWidth > (m_settings.getDataBitWidth() / 2 - m_toleranceBit)) && (m_measureWidth < ((m_settings.getDataBitWidth() / 2) + m_toleranceBit))) {
       m_results->AddMarker(m_serial->GetSampleNumber(), AnalyzerResults::One, inputChannel);
       m_data |= mask;
     } else if ((m_measureWidth > (m_zeroBitLen - m_toleranceBit)) && (m_measureWidth < (m_zeroBitLen + m_toleranceBit))) {
@@ -211,7 +211,7 @@ auto IEBusAnalyzer::getAddress(bool master) -> bool {
       m_serial->AdvanceToNextEdge();
       m_startSampleNumberFinish = m_serial->GetSampleNumber();
       m_measureWidth = (m_startSampleNumberFinish - m_startBitNumberStart);
-      if (m_measureWidth > (m_settings.getBitWidth() / 2 - m_toleranceBit) && m_measureWidth < (m_settings.getBitWidth() / 2 + m_toleranceBit)) {
+      if (m_measureWidth > (m_settings.getDataBitWidth() / 2 - m_toleranceBit) && m_measureWidth < (m_settings.getDataBitWidth() / 2 + m_toleranceBit)) {
         m_results->AddMarker(m_serial->GetSampleNumber(), AnalyzerResults::One, inputChannel);
         m_flags = 1;
       } else if ((m_measureWidth > (m_zeroBitLen - m_toleranceBit)) && (m_measureWidth < (m_zeroBitLen + m_toleranceBit))) {
@@ -230,7 +230,7 @@ auto IEBusAnalyzer::getAddress(bool master) -> bool {
     m_serial->AdvanceToNextEdge();
     m_startSampleNumberFinish = m_serial->GetSampleNumber();
     m_measureWidth = (m_startSampleNumberFinish - m_startBitNumberStart);
-    if (m_measureWidth > (m_settings.getBitWidth() / 2 - m_toleranceBit) && m_measureWidth < (m_settings.getBitWidth() / 2 + m_toleranceBit)) {
+    if (m_measureWidth > (m_settings.getDataBitWidth() / 2 - m_toleranceBit) && m_measureWidth < (m_settings.getDataBitWidth() / 2 + m_toleranceBit)) {
       m_results->AddMarker(m_serial->GetSampleNumber(), AnalyzerResults::One, inputChannel);
       m_flags = NAK;
     } else if ((m_measureWidth > (m_zeroBitLen - m_toleranceBit)) && (m_measureWidth < (m_zeroBitLen + m_toleranceBit))) {
@@ -262,7 +262,7 @@ auto IEBusAnalyzer::getData(U8 dataType) -> int {
     m_serial->AdvanceToNextEdge();
     m_startSampleNumberFinish = m_serial->GetSampleNumber();
     m_measureWidth = (m_startSampleNumberFinish - m_startBitNumberStart);
-    if (m_measureWidth > (m_settings.getBitWidth() / 2 - m_toleranceBit) && m_measureWidth < (m_settings.getBitWidth() / 2 + m_toleranceBit)) {
+    if (m_measureWidth > (m_settings.getDataBitWidth() / 2 - m_toleranceBit) && m_measureWidth < (m_settings.getDataBitWidth() / 2 + m_toleranceBit)) {
       m_results->AddMarker(m_serial->GetSampleNumber(), AnalyzerResults::One, inputChannel);
       m_data |= mask;
     } else {
@@ -282,7 +282,7 @@ auto IEBusAnalyzer::getData(U8 dataType) -> int {
       m_serial->AdvanceToNextEdge();
       m_startSampleNumberFinish = m_serial->GetSampleNumber();
       m_measureWidth = (m_startSampleNumberFinish - m_startBitNumberStart);
-      if (m_measureWidth > (m_settings.getBitWidth() / 2 - m_toleranceBit) && m_measureWidth < (m_settings.getBitWidth() / 2 + m_toleranceBit)) {
+      if (m_measureWidth > (m_settings.getDataBitWidth() / 2 - m_toleranceBit) && m_measureWidth < (m_settings.getDataBitWidth() / 2 + m_toleranceBit)) {
         m_results->AddMarker(m_serial->GetSampleNumber(), AnalyzerResults::One, inputChannel);
         // flags = 1;
       } else {
@@ -300,7 +300,7 @@ auto IEBusAnalyzer::getData(U8 dataType) -> int {
   m_serial->AdvanceToNextEdge();
   m_startSampleNumberFinish = m_serial->GetSampleNumber();
   m_measureWidth = (m_startSampleNumberFinish - m_startBitNumberStart);
-  if (m_measureWidth > (m_settings.getBitWidth() / 2 - m_toleranceBit) && m_measureWidth < (m_settings.getBitWidth() / 2 + m_toleranceBit)) {
+  if (m_measureWidth > (m_settings.getDataBitWidth() / 2 - m_toleranceBit) && m_measureWidth < (m_settings.getDataBitWidth() / 2 + m_toleranceBit)) {
     m_results->AddMarker(m_serial->GetSampleNumber(), AnalyzerResults::One, inputChannel);
     m_flags = m_flags | 2;
   } else {

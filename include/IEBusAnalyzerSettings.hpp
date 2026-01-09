@@ -23,7 +23,7 @@ public:
   ~IEBusAnalyzerSettings() override = default;
 
 public:
-  [[nodiscard]] auto getBitWidth() const -> int;
+  [[nodiscard]] auto getDataBitWidth() const -> int;
   [[nodiscard]] auto getInputChannel() const -> Channel;
   [[nodiscard]] auto getStartBitWidth() const -> int;
 
@@ -36,12 +36,12 @@ private:
   auto UpdateInterfacesFromSettings() -> void;
 
 private:
-  int m_bitWidth;
+  int m_dataBitWidth;
   int m_startBitWidth;
   Channel m_inputChannel;
 
 private:
-  AnalyzerSettingInterfaceInteger m_bitWidthInterface;
+  AnalyzerSettingInterfaceInteger m_dataBitWidthInterface;
   AnalyzerSettingInterfaceChannel m_inputChannelInterface;
   AnalyzerSettingInterfaceInteger m_startBitWidthInterface;
 };
